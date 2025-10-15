@@ -1,0 +1,133 @@
+import React, { useRef } from "react";
+import "./Skills.css";
+import { 
+  SiJavascript, 
+  SiTypescript, 
+  SiReact, 
+  SiNodedotjs, 
+  SiPhp, 
+  SiLaravel, 
+  SiHtml5, 
+  SiCss3, 
+  SiGit, 
+  SiMysql, 
+  SiTailwindcss, 
+  SiAdobeillustrator, 
+  SiAdobephotoshop, 
+  SiAutodesk,
+  SiAndroid,
+  SiC,
+  SiGithub,
+  SiWordpress,
+  SiLinux
+} from "react-icons/si";
+import { FaMobile, FaChevronLeft, FaChevronRight, FaProjectDiagram } from "react-icons/fa";
+
+const Skills: React.FC = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const technologies = [
+    // Frontend
+    { name: "JavaScript", icon: <SiJavascript />, color: "#F7DF1E", category: "Frontend" },
+    { name: "TypeScript", icon: <SiTypescript />, color: "#3178C6", category: "Frontend" },
+    { name: "React", icon: <SiReact />, color: "#61DAFB", category: "Frontend" },
+    { name: "HTML5", icon: <SiHtml5 />, color: "#E34F26", category: "Frontend" },
+    { name: "CSS3", icon: <SiCss3 />, color: "#1572B6", category: "Frontend" },
+    { name: "Tailwind", icon: <SiTailwindcss />, color: "#06B6D4", category: "Frontend" },
+    
+    // Backend
+    { name: "Node.js", icon: <SiNodedotjs />, color: "#339933", category: "Backend" },
+    { name: "PHP", icon: <SiPhp />, color: "#777BB4", category: "Backend" },
+    { name: "Laravel", icon: <SiLaravel />, color: "#FF2D20", category: "Backend" },
+    { name: "C", icon: <SiC />, color: "#A8B9CC", category: "Backend" },
+    
+    // Database
+    { name: "MySQL", icon: <SiMysql />, color: "#4479A1", category: "Database" },
+    
+    // Mobile
+    { name: "React Native", icon: <FaMobile />, color: "#61DAFB", category: "Mobile" },
+    { name: "Android SDK", icon: <SiAndroid />, color: "#3DDC84", category: "Mobile" },
+    
+    // Tools & Version Control
+    { name: "Git", icon: <SiGit />, color: "#F05032", category: "Tools" },
+    { name: "GitHub", icon: <SiGithub />, color: "#181717", category: "Tools" },
+    { name: "Linux CLI", icon: <SiLinux />, color: "#FCC624", category: "Tools" },
+    
+    // CMS & Frameworks
+    { name: "WordPress", icon: <SiWordpress />, color: "#21759B", category: "CMS" },
+    
+    // Methodologies
+    { name: "UML", icon: <FaProjectDiagram />, color: "#d4af37", category: "Methodology" },
+    { name: "Merise", icon: <FaProjectDiagram />, color: "#d4af37", category: "Methodology" },
+    
+    // Design
+    { name: "Illustrator", icon: <SiAdobeillustrator />, color: "#FF9A00", category: "Design" },
+    { name: "Photoshop", icon: <SiAdobephotoshop />, color: "#31A8FF", category: "Design" },
+    { name: "3ds Max", icon: <SiAutodesk />, color: "#0696D7", category: "Design" }
+  ];
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 400;
+      const currentScroll = scrollRef.current.scrollLeft;
+      const targetScroll = direction === 'left' 
+        ? currentScroll - scrollAmount 
+        : currentScroll + scrollAmount;
+      
+      scrollRef.current.scrollTo({
+        left: targetScroll,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  return (
+    <section id="skills" className="skills-section">
+      <div className="skills-container">
+        <div className="skills-top">
+          <div className="skills-header">
+            <span className="skills-line"></span>
+            <h2>SKILLS & TECHNOLOGIES</h2>
+          </div>
+          
+          <div className="scroll-buttons">
+            <button 
+              className="scroll-btn" 
+              onClick={() => scroll('left')}
+              aria-label="Scroll left"
+            >
+              <FaChevronLeft />
+            </button>
+            <button 
+              className="scroll-btn" 
+              onClick={() => scroll('right')}
+              aria-label="Scroll right"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+        </div>
+        
+        <p className="skills-description">
+          I specialize in <span className="highlight">full-stack development</span> delivering scalable web and mobile solutions from responsive frontends to robust backends and native Android apps. My workflow blends modern frameworks, clean architecture, and proven methodologies to build intuitive, multilingual user experiences.
+        </p>
+        
+        <div className="skills-scroll-wrapper" ref={scrollRef}>
+          <div className="skills-scroll">
+            {technologies.map((tech, index) => (
+              <div key={index} className="skill-card">
+                <span className="skill-badge">{tech.category}</span>
+                <div className="skill-icon" style={{ color: tech.color }}>
+                  {tech.icon}
+                </div>
+                <div className="skill-name">{tech.name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Skills;
