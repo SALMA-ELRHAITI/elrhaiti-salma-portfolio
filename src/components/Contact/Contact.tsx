@@ -1,299 +1,259 @@
 // Contact.tsx
-import React, { useState, useRef } from 'react';
-import emailjs from '@emailjs/browser';
+import React, { useEffect, useRef } from 'react';
+import { useForm } from '../../context/FormContext';
 import './Contact.css';
 
-interface FormData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}
-
-interface Status {
-  type: 'success' | 'error' | '';
-  message: string;
-}
-
 const Contact: React.FC = () => {
-  const formRef = useRef<HTMLFormElement>(null);
-  
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  
-  const [status, setStatus] = useState<Status>({ type: '', message: '' });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {
+    formData,
+    status,
+    isLoading,
+    focusedField,
+    handleChange,
+    handleSubmit,
+    setFocusedField
+  } = useForm();
 
   // ============================================
-  // CONFIGURATION EMAILJS (depuis .env avec Vite)
+  // CONTACT INFO DATA
   // ============================================
-  const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
-  const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
-  const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '';
+  const contactInfo = [
+    {
+      icon: (
+        <svg className="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      ),
+      title: 'Email',
+      value: 'salmaelrhaiti7@gmail.com',
+      link: 'mailto:salmaelrhaiti7@gmail.com'
+    },
+    {
+      icon: (
+        <svg className="icon" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+      ),
+      title: 'GitHub',
+      value: '@salma-elrhaiti',
+      link: 'https://github.com/salma-elrhaiti'
+    },
+    {
+      icon: (
+        <svg className="icon" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      ),
+      title: 'LinkedIn',
+      value: 'Salma El Rhaiti',
+      link: 'https://www.linkedin.com/in/salma-el-rhaiti/'
+    }
+  ];
 
   // ============================================
-  // VALIDATION DU FORMULAIRE
+  // RENDER
   // ============================================
-  const validateForm = (): boolean => {
-    // Validation du nom
-    if (!formData.name.trim() || formData.name.length < 2) {
-      setStatus({ 
-        type: 'error', 
-        message: '❌ Le nom doit contenir au moins 2 caractères' 
-      });
-      return false;
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const reveals = Array.from(container.querySelectorAll<HTMLElement>('.reveal'));
+
+    // assign stagger delays (order is document order)
+    reveals.forEach((el, i) => {
+      // 80ms base stagger
+      el.style.setProperty('--delay', `${i * 80}ms`);
+      // ensure will-change for performance
+      el.style.willChange = 'transform, opacity';
+    });
+
+    if (prefersReduced) {
+      // If user prefers reduced motion, reveal everything immediately
+      reveals.forEach((el) => el.classList.add('in-view'));
+      return;
     }
 
-    // Validation de l'email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim() || !emailRegex.test(formData.email)) {
-      setStatus({ 
-        type: 'error', 
-        message: '❌ Veuillez entrer un email valide' 
-      });
-      return false;
-    }
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            target.classList.add('in-view');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+    );
 
-    // Validation du message
-    if (!formData.message.trim() || formData.message.length < 10) {
-      setStatus({ 
-        type: 'error', 
-        message: '❌ Le message doit contenir au moins 10 caractères' 
-      });
-      return false;
-    }
+    reveals.forEach((el) => observer.observe(el));
 
-    // Protection anti-spam
-    if (formData.message.length > 5000) {
-      setStatus({ 
-        type: 'error', 
-        message: '❌ Le message est trop long (max 5000 caractères)' 
-      });
-      return false;
-    }
-
-    return true;
-  };
-
-  // ============================================
-  // SANITIZATION DES DONNÉES
-  // ============================================
-  const sanitizeInput = (input: string): string => {
-    return input
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      .replace(/<[^>]+>/g, '')
-      .trim();
-  };
-
-  // ============================================
-  // GESTION DE L'ENVOI
-  // ============================================
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    // Validation
-    if (!validateForm()) return;
-    
-    setIsLoading(true);
-    setStatus({ type: '', message: '' });
-
-    try {
-      // Préparer les données sanitizées
-      const templateParams = {
-        from_name: sanitizeInput(formData.name),
-        from_email: sanitizeInput(formData.email),
-        subject: sanitizeInput(formData.subject || 'Nouveau message de contact'),
-        message: sanitizeInput(formData.message),
-        to_name: 'Salma El Rhaiti',
-        reply_to: formData.email,
-      };
-
-      // Envoi avec EmailJS
-      const response = await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        templateParams,
-        PUBLIC_KEY
-      );
-
-      console.log('✅ Email envoyé avec succès!', response.status, response.text);
-      
-      setStatus({ 
-        type: 'success', 
-        message: '✅ Message envoyé avec succès! Je vous répondrai bientôt.' 
-      });
-      
-      // Réinitialiser le formulaire après 3 secondes
-      setTimeout(() => {
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        setStatus({ type: '', message: '' });
-      }, 3000);
-      
-    } catch (error) {
-      console.error('❌ Erreur lors de l\'envoi:', error);
-      setStatus({ 
-        type: 'error', 
-        message: '❌ Erreur lors de l\'envoi. Veuillez réessayer ou me contacter directement.' 
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // ============================================
-  // GESTION DES CHANGEMENTS
-  // ============================================
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    // Effacer les erreurs lors de la saisie
-    if (status.type === 'error') {
-      setStatus({ type: '', message: '' });
-    }
-  };
-
-  // ============================================
-  // RENDU DU COMPOSANT
-  // ============================================
+    return () => observer.disconnect();
+  }, []);
   return (
     <section id="contact" className="contact-section">
-      <div className="contact-container">
+      <div className="contact-container" ref={containerRef}>
         
-        {/* En-tête */}
+        {/* Animated Header */}
         <div className="contact-header">
-          <h2 className="contact-title">Contactez-moi</h2>
-          <p className="contact-subtitle">
-            Une question ? Un projet ? N'hésitez pas à me contacter
+          <div className="title-wrapper reveal">
+            <h2 className="contact-title">
+              Let's <span className="title-highlight">Connect</span>
+            </h2>
+            <div className="title-underline reveal"></div>
+          </div>
+          <p className="contact-subtitle reveal">
+            Have a project in mind or just want to say hello?
+            <br />
+            I'm always open to discussing new opportunities and creative collaborations.
           </p>
         </div>
 
-        {/* Formulaire */}
-        <form ref={formRef} onSubmit={handleSubmit} className="contact-form">
+        {/* Enhanced Form */}
+        <form onSubmit={handleSubmit} className="contact-form">
           
-          {/* Nom */}
-          <div className="form-group">
-            <label htmlFor="name" className="form-label">
-              <span className="label-icon">👤</span>
-              Nom complet *
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Votre nom"
-              maxLength={100}
-              className="form-input"
-              required
-            />
-          </div>
-
-          {/* Email */}
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              <span className="label-icon">✉️</span>
-              Adresse email *
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="votre@email.com"
-              maxLength={100}
-              className="form-input"
-              required
-            />
-          </div>
-
-          {/* Sujet */}
-          <div className="form-group">
-            <label htmlFor="subject" className="form-label">
-              <span className="label-icon">📋</span>
-              Sujet
-            </label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
-              placeholder="Sujet de votre message"
-              maxLength={200}
-              className="form-input"
-            />
-          </div>
-
-          {/* Message */}
-          <div className="form-group">
-            <label htmlFor="message" className="form-label">
-              <span className="label-icon">💬</span>
-              Message *
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Écrivez votre message ici..."
-              rows={6}
-              maxLength={5000}
-              className="form-textarea"
-              required
-            />
-            <span className="char-count">
-              {formData.message.length} / 5000 caractères
-            </span>
-          </div>
-
-          {/* Message de statut */}
-          {status.message && (
-            <div className={`status-message ${status.type}`}>
-              {status.message}
+          {/* Decorative Corner Accents */}
+          <div className="corner-accent corner-tl"></div>
+          <div className="corner-accent corner-br"></div>
+          
+          <div className="form-content">
+            {/* Form Header */}
+            <div className="form-header">
+              <h3 className="form-title reveal">Send Me a Message</h3>
+              <p className="form-description reveal">I typically respond within 24 hours</p>
             </div>
-          )}
 
-          {/* Bouton d'envoi */}
-          <button 
-            type="submit"
-            disabled={isLoading}
-            className={`submit-button ${isLoading ? 'loading' : ''}`}
-          >
-            {isLoading ? (
-              <>
-                <span className="spinner"></span>
-                Envoi en cours...
-              </>
-            ) : (
-              <>
-                <span className="button-icon">📤</span>
-                Envoyer le message
-              </>
+            {/* Name & Email Grid */}
+            <div className="form-row">
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField('name')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="Your Name*"
+                  maxLength={100}
+                  className="form-input"
+                  required
+                />
+                  <div className={`input-line ${focusedField === 'name' ? 'active' : ''} reveal`}></div>
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField('email')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="Your Email*"
+                  maxLength={100}
+                  className="form-input"
+                  required
+                />
+                <div className={`input-line ${focusedField === 'email' ? 'active' : ''} reveal`}></div>
+              </div>
+            </div>
+
+            {/* Subject */}
+            <div className="form-group">
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                onFocus={() => setFocusedField('subject')}
+                onBlur={() => setFocusedField('')}
+                placeholder="Subject"
+                maxLength={200}
+                className="form-input"
+              />
+              <div className={`input-line ${focusedField === 'subject' ? 'active' : ''} reveal`}></div>
+            </div>
+
+            {/* Message */}
+            <div className="form-group message-group">
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                onFocus={() => setFocusedField('message')}
+                onBlur={() => setFocusedField('')}
+                placeholder="Your Message*"
+                rows={6}
+                maxLength={5000}
+                className="form-textarea"
+                required
+              />
+              <div className={`input-line ${focusedField === 'message' ? 'active' : ''} reveal`}></div>
+              <span className="char-count">{formData.message.length}/5000</span>
+            </div>
+
+            {/* Status Message */}
+            {status.message && (
+              <div className={`status-message ${status.type} reveal`}>
+                {status.message}
+              </div>
             )}
-          </button>
+
+            {/* Enhanced Submit Button */}
+            <button 
+              type="submit"
+              disabled={isLoading}
+              className="submit-button reveal"
+            >
+              <span className="btn-overlay"></span>
+              {isLoading ? (
+                <>
+                  <span className="spinner"></span>
+                  <span className="btn-text">Sending...</span>
+                </>
+              ) : (
+                <>
+                  <span className="btn-text">Send Message</span>
+                  <svg className="btn-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </>
+              )}
+            </button>
+          </div>
 
         </form>
 
-        {/* Informations de contact supplémentaires */}
-        <div className="contact-info">
-          <p className="info-text">
-            Vous pouvez aussi me contacter directement par email à{' '}
-            <a href="mailto:salmaelrhaiti7@gmail.com" className="email-link">
-              salmaelrhaiti7@gmail.com
-            </a>
+        {/* Footer */}
+          <div className="contact-footer">
+          {/* Copyright */}
+          <p className="copyright-text reveal">
+            © 2025 Salma El Rhaiti. All rights reserved.
           </p>
+          
+          {/* Contact Links */}
+          <div className="footer-links">
+            {contactInfo.map((item, index) => (
+              <a 
+                key={index}
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-link reveal"
+                title={item.title}
+              >
+                {item.icon}
+              </a>
+            ))}
+          </div>
         </div>
 
       </div>

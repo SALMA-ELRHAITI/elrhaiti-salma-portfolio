@@ -6,6 +6,7 @@ import Skills from './components/Skills/Skills';
 import Projects from './components/Projects/Projects';
 import ExperienceEducation from './components/Experience/Experience';
 import Contact from './components/Contact/Contact';
+import { FormProvider } from './context/FormContext';
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
         <Skills />
         <Projects />
         <ExperienceEducation />
-        <Contact />
+        <FormProvider>
+          <Contact />
+        </FormProvider>
       </main>
     </div>
   );

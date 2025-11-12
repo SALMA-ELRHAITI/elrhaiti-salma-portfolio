@@ -1,98 +1,132 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { MapPin, Calendar, Briefcase, GraduationCap, Award } from 'lucide-react';
 import './Experience.css';
 
-const experiences = [
+interface ExperienceItem {
+  role: string;
+  company: string;
+  location: string;
+  period: string;
+  description: string;
+  logo: string;
+  isCurrent?: boolean;
+  skills?: string[];
+}
+
+interface EducationItem {
+  degree: string;
+  school: string;
+  location: string;
+  period: string;
+  description: string;
+  logo?: string;
+  icon?: React.ReactNode;
+  skills?: string[];
+}
+
+const experiences: ExperienceItem[] = [
   {
     role: 'Apprenante – Piscine 1337',
     company: '1337 Coding School',
     location: 'Khouribga, Morocco',
     period: '07/2025',
-    description:
-      'Intensive training in C, Shell, and Linux. Completed projects in C programming, Shell scripts, and algorithmic problem-solving. Developed autonomy, resilience, and debugging skills.',
-    logo: 'school42.png',
-    hasPhoto: true,
-    photoUrl: '/mein1337.jpg' 
+    description: 'Intensive 4-week coding bootcamp focused on C programming, Shell scripting, and Linux systems. Completed multiple projects including C libraries, shell implementations, and algorithmic challenges.',
+    logo: 'mein1337.jpg',
+    skills: ['C Programming', 'Shell Scripting', 'Linux', 'Algorithms', 'Git']
   },
   {
     role: 'Full Stack Development Intern',
     company: 'Logicat',
     location: 'Meknès, Morocco',
     period: '03/2025 - 05/2025',
-    description:
-      'Developed and optimized the EduVerse application using React.js and TypeScript. Designed and integrated a RESTful API with Laravel/MySQL for user, class, and exam management.',
-    logo: 'logicat.png'
+    description: 'Led the development of EduVerse educational platform using modern web technologies. Implemented responsive UI components with React.js and TypeScript, designed RESTful APIs with Laravel.',
+    logo: 'logicat.png',
+    skills: ['React.js', 'TypeScript', 'Laravel', 'MySQL', 'REST API']
   },
   {
     role: 'Web Development Intern',
     company: 'Agence WebDono',
     location: 'Meknès, Morocco',
     period: '04/2025',
-    description:
-      'Designed and customized WordPress sites (Divi) and blogs for various clients. Optimized UX/UI and translated websites for multilingual audiences.',
-    logo: '/webdono.png'
+    description: 'Designed and developed custom WordPress websites for diverse client portfolios using Divi builder. Implemented multilingual support, optimized website performance, and improved SEO rankings.',
+    logo: '/webdonoo.png',
+    skills: ['WordPress', 'Divi Builder','SEO']
   },
   {
     role: 'IT Service Intern',
     company: 'OCP Group',
     location: 'Khouribga, Morocco',
     period: '07/2024',
-    description:
-      'Developed a recruitment and communication website for OCP using HTML, CSS, PHP, and JavaScript. Integrated a "Careers" section and an interactive contact form.',
-    logo: 'ocp.png'
+    description: 'Developed a comprehensive recruitment and corporate communication platform for OCP Group. Built dynamic web interfaces with HTML5, CSS3, and JavaScript, implemented backend functionality with PHP.',
+    logo: 'ocp.png',
+    skills: ['HTML5', 'CSS3', 'JavaScript', 'PHP', 'Bootstrap']
   }
 ];
 
-const education = [
+const education: EducationItem[] = [
+  {
+    degree: 'Parcours d\'Excellence - Licence d\'Excellence en ISOC',
+    school: 'Faculté des Sciences Meknès',
+    location: 'Meknès, Morocco',
+    period: '2025 – 2028',
+    description: 'Specialized program in Internet of Things (IoT) Security and Connected Devices Intelligence. Comprehensive curriculum covering cybersecurity principles, network security protocols, and embedded systems programming.',
+    logo: 'fs.png',
+    skills: ['IoT Security', 'Cybersecurity', 'Embedded Systems', 'Network Security']
+  },
   {
     degree: 'Information Technology Training',
     school: 'École Supérieure de Technologie (EST)',
     location: 'Meknès, Morocco',
     period: '2023 – 2025',
-    description:
-      'Specialized training in web development, information technologies, and multimedia. Mastery of modern frameworks and agile methodologies.',
-    icon: '🎓'
+    description: 'Comprehensive technical education in web development, software engineering, and multimedia technologies. Mastered modern development frameworks, database management systems, and agile project methodologies.',
+    logo: 'est.png',
+    skills: ['Full Stack Development','Web Technologies','Database Management','Agile Methodology','Multimedia Integration'
+]
   },
   {
     degree: 'Baccalaureate in Physical Sciences',
     school: 'Lycée Imam Malek',
     location: 'Khouribga, Morocco',
     period: '2022 - 2023',
-    description:
-      'Secondary school diploma with a specialization in physical sciences and mathematics.',
-    icon: '📚'
+    description: 'Secondary education with specialization in physical sciences and mathematics. Developed strong analytical and problem-solving skills through rigorous curriculum.',
+    icon: <Award size={20} className="education-symbol" />,
+    skills: ['Mathematics', 'Physics', 'Chemistry', 'Problem Solving']
   }
 ];
 
-const ExperienceEducation = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState('');
+const ExperienceEducation: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'professional' | 'academic'>('professional');
+  const [visibleItems, setVisibleItems] = useState<number[]>([]);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const openPhotoModal = (photoUrl: string) => {
-    setSelectedPhoto(photoUrl);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedPhoto('');
-  };
-
-  // ✅ ESC key closes modal
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeModal();
-      }
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = itemRefs.current.indexOf(entry.target as HTMLDivElement);
+            if (index !== -1 && !visibleItems.includes(index)) {
+              setTimeout(() => {
+                setVisibleItems((prev) => [...prev, index]);
+              }, index * 80);
+            }
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '-30px' }
+    );
 
-    if (isModalOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-    }
+    itemRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isModalOpen]);
+    return () => observer.disconnect();
+  }, [visibleItems, activeTab]);
+
+  const handleTabChange = (tab: 'professional' | 'academic') => {
+    setActiveTab(tab);
+    setVisibleItems([]);
+  };
 
   return (
     <section id="experience" className="exp-edu-section">
@@ -103,90 +137,133 @@ const ExperienceEducation = () => {
           <span className="exp-edu-line"></span>
         </div>
 
-        <div className="exp-edu-columns">
-          {/* Experience */}
-          <div className="exp-edu-half">
-            <h3 className="exp-edu-subtitle">Experience</h3>
+        <div className="exp-edu-toggle">
+          <div className={`toggle-bg ${activeTab === 'academic' ? 'academic' : ''}`}></div>
+          <button 
+            className={`toggle-btn ${activeTab === 'professional' ? 'active' : ''}`}
+            onClick={() => handleTabChange('professional')}
+          >
+            <Briefcase size={13} />
+            Professional
+          </button>
+          <button 
+            className={`toggle-btn ${activeTab === 'academic' ? 'active' : ''}`}
+            onClick={() => handleTabChange('academic')}
+          >
+            <GraduationCap size={13} />
+            Academic
+          </button>
+        </div>
+
+        <div className="exp-edu-content">
+          <div className={`exp-edu-column ${activeTab === 'professional' ? 'active' : ''}`}>
             {experiences.map((exp, idx) => (
-              <div key={idx} className="exp-edu-item">
+              <div 
+                key={idx}
+                ref={(el) => (itemRefs.current[idx] = el)}
+                className={`exp-edu-item ${visibleItems.includes(idx) ? 'visible' : ''}`}
+              >
                 <div className="exp-edu-item-content">
                   <div className="exp-edu-logo-company">
-                    <div className="exp-edu-logo-wrapper">
-                      <div className="exp-edu-logo-container">
-                        <img src={exp.logo} alt={exp.company} className="exp-edu-logo" />
-                      </div>
+                    <div className="exp-edu-logo-container">
+                      <img 
+                        src={exp.logo} 
+                        alt={exp.company} 
+                        className="exp-edu-logo"
+                        loading="lazy"
+                      />
                     </div>
                     <div className="company-info">
-                      <span className="exp-edu-company">{exp.company}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <span className="exp-edu-company">{exp.company}</span>
+                        {exp.isCurrent && (
+                          <span className="current-position-badge">Current</span>
+                        )}
+                      </div>
                       <div className="exp-edu-role">{exp.role}</div>
                       <div className="exp-edu-meta">
-                        <span className="exp-edu-location">{exp.location}</span>
-                        <span>•</span>
-                        <span className="exp-edu-period">{exp.period}</span>
+                        <span className="exp-edu-location">
+                          <MapPin size={12} />
+                          {exp.location}
+                        </span>
+                        <span className="exp-edu-period">
+                          <Calendar size={12} />
+                          {exp.period}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className="exp-edu-description">{exp.description}</div>
-                  {exp.hasPhoto && (
-                    <button className="view-photo-btn" onClick={() => openPhotoModal(exp.photoUrl)}>
-                      <svg fill="currentColor" viewBox="0 0 20 20" width="16" height="16">
-                        <path
-                          fillRule="evenodd"
-                          d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      View Photo
-                    </button>
+                  
+                  {exp.skills && (
+                    <div className="skills-tags">
+                      {exp.skills.map((skill, skillIdx) => (
+                        <span key={skillIdx} className="skill-tag">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Education */}
-          <div className="exp-edu-half">
-            <h3 className="exp-edu-subtitle">Education</h3>
+          <div className={`exp-edu-column ${activeTab === 'academic' ? 'active' : ''}`}>
             {education.map((edu, idx) => (
-              <div key={idx} className="exp-edu-item">
+              <div 
+                key={idx}
+                ref={(el) => (itemRefs.current[experiences.length + idx] = el)}
+                className={`exp-edu-item ${visibleItems.includes(experiences.length + idx) ? 'visible' : ''}`}
+              >
                 <div className="exp-edu-item-content">
                   <div className="exp-edu-logo-company">
-                    <div className="exp-edu-icon">{edu.icon}</div>
+                    {edu.logo ? (
+                      <div className="exp-edu-logo-container">
+                        <img 
+                          src={edu.logo} 
+                          alt={edu.school} 
+                          className="exp-edu-logo"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div className="exp-edu-symbol-container">
+                        {edu.icon}
+                      </div>
+                    )}
                     <div className="company-info">
                       <span className="exp-edu-school">{edu.school}</span>
                       <div className="exp-edu-degree">{edu.degree}</div>
                       <div className="exp-edu-meta">
-                        <span className="exp-edu-location">{edu.location}</span>
-                        <span>•</span>
-                        <span className="exp-edu-period">{edu.period}</span>
+                        <span className="exp-edu-location">
+                          <MapPin size={12} />
+                          {edu.location}
+                        </span>
+                        <span className="exp-edu-period">
+                          <Calendar size={12} />
+                          {edu.period}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className="exp-edu-description">{edu.description}</div>
+                  
+                  {edu.skills && (
+                    <div className="skills-tags">
+                      {edu.skills.map((skill, skillIdx) => (
+                        <span key={skillIdx} className="skill-tag">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="photo-modal-overlay" onClick={closeModal}>
-          <div className="photo-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="photo-modal-close" onClick={closeModal}>
-              <svg fill="currentColor" viewBox="0 0 20 20" width="24" height="24">
-                <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            <img src={selectedPhoto} alt="Experience Photo" className="photo-modal-image" />
-          </div>
-        </div>
-      )}
     </section>
   );
 };
