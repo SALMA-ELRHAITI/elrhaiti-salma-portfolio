@@ -78,7 +78,7 @@ I build modern web and mobile applications using React, Node.js, PHP, Laravel, a
 						<div className="frame-corner bottom-left"></div>
 						<div className="frame-corner bottom-right"></div>
 						<img 
-							src="moi.jpg" 
+							src="/images/moi.jpg" 
 							alt="Salma El Rhaiti" 
 							className={`profile-photo ${imageLoaded ? 'loaded' : ''}`}
 							onLoad={() => setImageLoaded(true)}

@@ -31,7 +31,7 @@ const experiences: ExperienceItem[] = [
     location: 'Khouribga, Morocco',
     period: '07/2025',
     description: 'Intensive 4-week coding bootcamp focused on C programming, Shell scripting, and Linux systems. Completed multiple projects including C libraries, shell implementations, and algorithmic challenges.',
-    logo: 'mein1337.jpg',
+    logo: '/images/mein1337.jpg',
     skills: ['C Programming', 'Shell Scripting', 'Linux', 'Algorithms', 'Git']
   },
   {
@@ -40,7 +40,7 @@ const experiences: ExperienceItem[] = [
     location: 'Meknès, Morocco',
     period: '03/2025 - 05/2025',
     description: 'Led the development of EduVerse educational platform using modern web technologies. Implemented responsive UI components with React.js and TypeScript, designed RESTful APIs with Laravel.',
-    logo: 'logicat.png',
+    logo: '/images/logicat.png',
     skills: ['React.js', 'TypeScript', 'Laravel', 'MySQL', 'REST API']
   },
   {
@@ -49,7 +49,7 @@ const experiences: ExperienceItem[] = [
     location: 'Meknès, Morocco',
     period: '04/2025',
     description: 'Designed and developed custom WordPress websites for diverse client portfolios using Divi builder. Implemented multilingual support, optimized website performance, and improved SEO rankings.',
-    logo: '/webdonoo.png',
+    logo: '/images/webdonoo.png',
     skills: ['WordPress', 'Divi Builder','SEO']
   },
   {
@@ -58,7 +58,7 @@ const experiences: ExperienceItem[] = [
     location: 'Khouribga, Morocco',
     period: '07/2024',
     description: 'Developed a comprehensive recruitment and corporate communication platform for OCP Group. Built dynamic web interfaces with HTML5, CSS3, and JavaScript, implemented backend functionality with PHP.',
-    logo: 'ocp.png',
+    logo: '/images/ocp.png',
     skills: ['HTML5', 'CSS3', 'JavaScript', 'PHP', 'Bootstrap']
   }
 ];
@@ -70,7 +70,7 @@ const education: EducationItem[] = [
     location: 'Meknès, Morocco',
     period: '2025 – 2028',
     description: 'Specialized program in Internet of Things (IoT) Security and Connected Devices Intelligence. Comprehensive curriculum covering cybersecurity principles, network security protocols, and embedded systems programming.',
-    logo: 'fs.png',
+    logo: '/images/fs.png',
     skills: ['IoT Security', 'Cybersecurity', 'Embedded Systems', 'Network Security']
   },
   {
@@ -79,7 +79,7 @@ const education: EducationItem[] = [
     location: 'Meknès, Morocco',
     period: '2023 – 2025',
     description: 'Comprehensive technical education in web development, software engineering, and multimedia technologies. Mastered modern development frameworks, database management systems, and agile project methodologies.',
-    logo: 'est.png',
+    logo: '/images/est.png',
     skills: ['Full Stack Development','Web Technologies','Database Management','Agile Methodology','Multimedia Integration']
   },
   {

@@ -47,7 +47,7 @@ interface ProjectModalProps {
 const projects: Project[] = [
   {
     id: 1,
-    image: "osishotel.jpg",
+    image: "/images/osishotel.jpg",
     category: "Web Application",
     title: "Hotel Management System with QR Code Integration",
     link: "#",
@@ -67,16 +67,16 @@ const projects: Project[] = [
       "Analytics and reporting module for occupancy rates, revenue tracking, and performance insights"
     ],
     screenshots: [
-      "hotel.png",
-      "hotel-dashboard.png",
-      "hotel-booking.png",
-      "hotel-qr.png"
+      "/images/hotel.png",
+      "/images/hotel-dashboard.png",
+      "/images/hotel-booking.png",
+      "/images/hotel-qr.png"
     ],
     scrollable: true
   },
   {
     id: 2,
-    image: "school.png",
+    image: "/images/school.png",
     category: "Full-Stack Web Application",
     title: "EduVerse – School Management System for Technical High Schools",
     link: "#",
@@ -97,16 +97,16 @@ const projects: Project[] = [
       "Administrative tools for resource management, classroom allocation, and facility scheduling for technical workshops"
     ],
     screenshots: [
-      "login.png",
-       "loginteach.png",
-      "dashadmin.png",
-      "attadmin.png",
-      "dashstudent.png"
+      "/images/login.png",
+      "/images/loginteach.png",
+      "/images/dashadmin.png",
+      "/images/attadmin.png",
+      "/images/dashstudent.png"
     ]
   },
   {
     id: 3,
-    image: "estmmax.jpg",
+    image: "/images/estmmax.jpg",
     category: "3D Visualization & Virtual Tour",
     title: "Interactive 3D Tour of EST Meknès with Camera Navigation",
     link: "#",
@@ -123,13 +123,13 @@ const projects: Project[] = [
       "Mobile-responsive controls for exploration on smartphones and tablets"
     ],
     screenshots: [
-      "fullmax.png",
-      "spacemax.png"
+      "/images/fullmax.png",
+      "/images/spacemax.png"
     ]
   },
   {
     id: 4,
-    image: "themedivi1.png",
+    image: "/images/themedivi1.png",
     category: "Frontend Web Project / WordPress with Divi Theme",
     title: "Cultural Immersion Experience in a Berber Village - Atlas Mountains",
     link: "https://morocclytravel.com/cultural-immersion-a-day-in-the-life-of-a-berber-village/",
@@ -146,13 +146,13 @@ const projects: Project[] = [
       "Integrated booking system for seamless travel experience reservations"
     ],
     screenshots: [
-      "fulldivi2.png"
+      "/images/fulldivi2.png"
     ],
     scrollable: true
   },
   {
     id: 5,
-    image: "gamekids.png",
+    image: "/images/gamekids.png",
     category: "Educational Mobile Application",
     title: "Code & Adventure: Learn HTML & CSS Through Play",
     link: "#",
@@ -170,14 +170,14 @@ const projects: Project[] = [
       "Achievement system with badges and rewards to motivate continued learning and progress"
     ],
     screenshots: [
-      "codeapp.png",
-      "appnv1.png",
-      "kidshtml.png"
+      "/images/codeapp.png",
+      "/images/appnv1.png",
+      "/images/kidshtml.png"
     ]
   },
   {
     id: 6,
-    image: "themedivi.png",
+    image: "/images/themedivi.png",
     category: "Frontend Web Project / WordPress with Divi Theme",
     title: "Morocco's Festivals and Traditions: A Deep Dive into Cultural Celebrations",
     link: "https://inmoroccotrips.com/moroccos-festivals-and-traditions-a-deep-dive-into-cultural-celebrations/",
@@ -194,7 +194,7 @@ const projects: Project[] = [
       "Social media integration for easy sharing and increased engagement with cultural content"
     ],
     screenshots: [
-      "fulldivi.png"
+      "/images/fulldivi.png"
     ],
     scrollable: true
   }
