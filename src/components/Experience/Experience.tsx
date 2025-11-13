@@ -80,8 +80,7 @@ const education: EducationItem[] = [
     period: '2023 – 2025',
     description: 'Comprehensive technical education in web development, software engineering, and multimedia technologies. Mastered modern development frameworks, database management systems, and agile project methodologies.',
     logo: 'est.png',
-    skills: ['Full Stack Development','Web Technologies','Database Management','Agile Methodology','Multimedia Integration'
-]
+    skills: ['Full Stack Development','Web Technologies','Database Management','Agile Methodology','Multimedia Integration']
   },
   {
     degree: 'Baccalaureate in Physical Sciences',
@@ -160,7 +159,7 @@ const ExperienceEducation: React.FC = () => {
             {experiences.map((exp, idx) => (
               <div 
                 key={idx}
-                ref={(el) => {itemRefs.current[idx] = el}}
+                ref={(el) => { itemRefs.current[idx] = el; }}
                 className={`exp-edu-item ${visibleItems.includes(idx) ? 'visible' : ''}`}
               >
                 <div className="exp-edu-item-content">
@@ -213,7 +212,7 @@ const ExperienceEducation: React.FC = () => {
             {education.map((edu, idx) => (
               <div 
                 key={idx}
-                ref={(el) => {itemRefs.current[experiences.length + idx] = el}}
+                ref={(el) => { itemRefs.current[experiences.length + idx] = el; }}
                 className={`exp-edu-item ${visibleItems.includes(experiences.length + idx) ? 'visible' : ''}`}
               >
                 <div className="exp-edu-item-content">
