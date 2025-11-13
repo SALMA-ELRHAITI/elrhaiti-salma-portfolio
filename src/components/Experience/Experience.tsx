@@ -160,7 +160,7 @@ const ExperienceEducation: React.FC = () => {
             {experiences.map((exp, idx) => (
               <div 
                 key={idx}
-                ref={(el) => (itemRefs.current[idx] = el)}
+                ref={(el) => {itemRefs.current[idx] = el}}
                 className={`exp-edu-item ${visibleItems.includes(idx) ? 'visible' : ''}`}
               >
                 <div className="exp-edu-item-content">
@@ -213,7 +213,7 @@ const ExperienceEducation: React.FC = () => {
             {education.map((edu, idx) => (
               <div 
                 key={idx}
-                ref={(el) => (itemRefs.current[experiences.length + idx] = el)}
+                ref={(el) => {itemRefs.current[experiences.length + idx] = el}}
                 className={`exp-edu-item ${visibleItems.includes(experiences.length + idx) ? 'visible' : ''}`}
               >
                 <div className="exp-edu-item-content">

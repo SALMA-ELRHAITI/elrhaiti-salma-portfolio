@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import "./Skills.css";
 import { 
   SiJavascript, 
@@ -27,7 +27,6 @@ const Skills: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollContentRef = useRef<HTMLDivElement>(null);
   const [isAutoScroll, setIsAutoScroll] = useState(true);
-  const [currentPosition, setCurrentPosition] = useState(0);
 
   const technologies = [
     // Languages
@@ -89,22 +88,6 @@ const Skills: React.FC = () => {
       setTimeout(() => setIsAutoScroll(true), 5000);
     }
   };
-
-  // Handle scroll events to track position
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      setCurrentPosition(scrollRef.current.scrollLeft);
-    }
-  };
-
-  // Add scroll event listener
-  useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (scrollElement) {
-      scrollElement.addEventListener('scroll', handleScroll);
-      return () => scrollElement.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
 
   return (
     <section id="skills" className="skills-section">
