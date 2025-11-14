@@ -127,7 +127,6 @@ const Intro: React.FC = () => {
     projectsSection?.scrollIntoView({ behavior: 'smooth' });
   };
 
-
   return (
     <section 
       ref={sectionRef}
@@ -147,7 +146,7 @@ const Intro: React.FC = () => {
         
         <h1 className="intro-title">
           <span className="intro-line">
-            <span className="intro-prefix">I'm a </span>
+            <span className="intro-prefix">I'm a</span>
             <span className="title-accent typewriter">
               {typedTexts[0]}
               {currentLineIndex === 0 && <span className="cursor">|</span>}
@@ -169,12 +168,10 @@ const Intro: React.FC = () => {
           </span>
         </h1>
 
-        {/* ...existing code... */}
-
         {/* Social Links */}
         <div className="intro-socials">
           <a 
-            href="https://github.com/yourusername" 
+            href="https://github.com/SALMA-ELRHAITI" 
             target="_blank" 
             rel="noopener noreferrer"
             className="social-link"

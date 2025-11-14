@@ -30,7 +30,6 @@ const Skills: React.FC = () => {
 
   const technologies = [
     // Languages
-    { name: "JavaScript", icon: <SiJavascript />, color: "#F7DF1E", category: "Language" },
     { name: "TypeScript", icon: <SiTypescript />, color: "#3178C6", category: "Language" },
     { name: "PHP", icon: <SiPhp />, color: "#777BB4", category: "Language" },
     { name: "C", icon: <SiC />, color: "#A8B9CC", category: "Language" },
@@ -49,8 +48,7 @@ const Skills: React.FC = () => {
     { name: "MySQL", icon: <SiMysql />, color: "#4479A1", category: "Database" },
 
     // Mobile
-    { name: "React Native", icon: <FaMobile />, color: "#61DAFB", category: "Mobile" },
-    { name: "Android SDK", icon: <SiAndroid />, color: "#3DDC84", category: "Mobile" },
+    { name: "Android SDK (Java)", icon: <SiAndroid />, color: "#3DDC84", category: "Mobile" },
 
     // Tools
     { name: "Git", icon: <SiGit />, color: "#F05032", category: "Tool" },
@@ -65,7 +63,6 @@ const Skills: React.FC = () => {
     { name: "Merise", icon: <FaProjectDiagram />, color: "#d4af37", category: "Methodology" },
 
     // Design
-    { name: "Illustrator", icon: <SiAdobeillustrator />, color: "#FF9A00", category: "Design" },
     { name: "Photoshop", icon: <SiAdobephotoshop />, color: "#31A8FF", category: "Design" },
     { name: "3ds Max", icon: <SiAutodesk />, color: "#0696D7", category: "Design" }
   ];

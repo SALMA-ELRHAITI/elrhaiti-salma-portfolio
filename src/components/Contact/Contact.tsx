@@ -46,7 +46,7 @@ const Contact: React.FC = () => {
       ),
       title: 'LinkedIn',
       value: 'Salma El Rhaiti',
-      link: 'https://www.linkedin.com/in/salma-el-rhaiti/'
+      link: 'https://www.linkedin.com/in/salma-el-rhaiti-732a05303/'
     }
   ];
 
