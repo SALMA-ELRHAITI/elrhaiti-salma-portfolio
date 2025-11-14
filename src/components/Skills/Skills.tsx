@@ -1,27 +1,25 @@
 import React, { useRef, useState } from "react";
 import "./Skills.css";
 import { 
-  SiJavascript, 
   SiTypescript, 
-  SiReact, 
-  SiNodedotjs, 
   SiPhp, 
-  SiLaravel, 
+  SiReact, 
   SiHtml5, 
   SiCss3, 
-  SiGit, 
+  SiNodedotjs, 
+  SiLaravel, 
   SiMysql, 
   SiTailwindcss, 
-  SiAdobeillustrator, 
-  SiAdobephotoshop, 
-  SiAutodesk,
   SiAndroid,
   SiC,
+  SiGit,
   SiGithub,
+  SiLinux,
   SiWordpress,
-  SiLinux
+  SiAdobephotoshop,
+  SiAutodesk
 } from "react-icons/si";
-import { FaMobile, FaChevronLeft, FaChevronRight, FaProjectDiagram } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaProjectDiagram } from "react-icons/fa";
 
 const Skills: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
