@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Calendar, Briefcase, GraduationCap, Award } from 'lucide-react';
-import './Experience.css';
+import { MapPin, Calendar, Briefcase, GraduationCap, Award, ExternalLink } from 'lucide-react';
 
 interface ExperienceItem {
   role: string;
@@ -11,6 +10,8 @@ interface ExperienceItem {
   logo: string;
   isCurrent?: boolean;
   skills?: string[];
+  exerciseImage?: string;
+  hasExercises?: boolean;
 }
 
 interface EducationItem {
@@ -31,7 +32,9 @@ const experiences: ExperienceItem[] = [
     location: 'Khouribga, Morocco',
     period: '07/2025',
     description: 'Intensive 4-week coding bootcamp focused on C programming, Shell scripting, and Linux systems. Completed multiple projects including C libraries, shell implementations, and algorithmic challenges.',
-    logo: '/images/mein1337.jpg',
+    logo: '/images/mein1337.png',
+    exerciseImage: '/images/exp1337.jpg',
+    hasExercises: true,
     skills: ['C Programming', 'Shell Scripting', 'Linux', 'Algorithms', 'Git']
   },
   {
@@ -88,7 +91,7 @@ const education: EducationItem[] = [
     location: 'Khouribga, Morocco',
     period: '2022 - 2023',
     description: 'Secondary education with specialization in physical sciences and mathematics. Developed strong analytical and problem-solving skills through rigorous curriculum.',
-    icon: <Award size={20} className="education-symbol" />,
+    icon: <Award size={20} style={{ color: '#d4af37' }} />,
     skills: ['Mathematics', 'Physics', 'Chemistry', 'Problem Solving']
   }
 ];
@@ -96,6 +99,8 @@ const education: EducationItem[] = [
 const ExperienceEducation: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'professional' | 'academic'>('professional');
   const [visibleItems, setVisibleItems] = useState<number[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -127,143 +132,549 @@ const ExperienceEducation: React.FC = () => {
     setVisibleItems([]);
   };
 
+  const openModal = (imageSrc: string) => {
+    setSelectedImage(imageSrc);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedImage('');
+  };
+
   return (
-    <section id="experience" className="exp-edu-section">
-      <div className="exp-edu-container">
-        <div className="exp-edu-header">
-          <span className="exp-edu-line"></span>
-          <h2>EXPERIENCE & EDUCATION</h2>
-          <span className="exp-edu-line"></span>
-        </div>
-
-        <div className="exp-edu-toggle">
-          <div className={`toggle-bg ${activeTab === 'academic' ? 'academic' : ''}`}></div>
-          <button 
-            className={`toggle-btn ${activeTab === 'professional' ? 'active' : ''}`}
-            onClick={() => handleTabChange('professional')}
-          >
-            <Briefcase size={13} />
-            Professional
-          </button>
-          <button 
-            className={`toggle-btn ${activeTab === 'academic' ? 'active' : ''}`}
-            onClick={() => handleTabChange('academic')}
-          >
-            <GraduationCap size={13} />
-            Academic
-          </button>
-        </div>
-
-        <div className="exp-edu-content">
-          <div className={`exp-edu-column ${activeTab === 'professional' ? 'active' : ''}`}>
-            {experiences.map((exp, idx) => (
-              <div 
-                key={idx}
-                ref={(el) => { itemRefs.current[idx] = el; }}
-                className={`exp-edu-item ${visibleItems.includes(idx) ? 'visible' : ''}`}
-              >
-                <div className="exp-edu-item-content">
-                  <div className="exp-edu-logo-company">
-                    <div className="exp-edu-logo-container">
-                      <img 
-                        src={exp.logo} 
-                        alt={exp.company} 
-                        className="exp-edu-logo"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="company-info">
-                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-                        <span className="exp-edu-company">{exp.company}</span>
-                        {exp.isCurrent && (
-                          <span className="current-position-badge">Current</span>
-                        )}
-                      </div>
-                      <div className="exp-edu-role">{exp.role}</div>
-                      <div className="exp-edu-meta">
-                        <span className="exp-edu-location">
-                          <MapPin size={12} />
-                          {exp.location}
-                        </span>
-                        <span className="exp-edu-period">
-                          <Calendar size={12} />
-                          {exp.period}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="exp-edu-description">{exp.description}</div>
-                  
-                  {exp.skills && (
-                    <div className="skills-tags">
-                      {exp.skills.map((skill, skillIdx) => (
-                        <span key={skillIdx} className="skill-tag">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+    <>
+      <section id="experience" style={{
+        minHeight: '100vh',
+        background: '#000000',
+        padding: '5rem 1rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ maxWidth: '1000px', width: '100%', position: 'relative', zIndex: 1 }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '1rem',
+            marginBottom: '3rem'
+          }}>
+            <span style={{
+              height: '1px',
+              width: '60px',
+              background: '#d4af37'
+            }}></span>
+            <h2 style={{
+              fontSize: '0.9rem',
+              letterSpacing: '0.3em',
+              color: '#d4af37',
+              fontWeight: 400,
+              margin: 0,
+              textTransform: 'uppercase'
+            }}>EXPERIENCE & EDUCATION</h2>
+            <span style={{
+              height: '1px',
+              width: '60px',
+              background: '#d4af37'
+            }}></span>
           </div>
 
-          <div className={`exp-edu-column ${activeTab === 'academic' ? 'active' : ''}`}>
-            {education.map((edu, idx) => (
-              <div 
-                key={idx}
-                ref={(el) => { itemRefs.current[experiences.length + idx] = el; }}
-                className={`exp-edu-item ${visibleItems.includes(experiences.length + idx) ? 'visible' : ''}`}
-              >
-                <div className="exp-edu-item-content">
-                  <div className="exp-edu-logo-company">
-                    {edu.logo ? (
-                      <div className="exp-edu-logo-container">
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '3rem',
+            background: 'rgba(255, 255, 255, 0.03)',
+            borderRadius: '8px',
+            padding: '0.25rem',
+            maxWidth: '280px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            position: 'relative'
+          }}>
+            <div style={{
+              position: 'absolute',
+              top: '0.25rem',
+              left: activeTab === 'academic' ? 'calc(50% + 0.25rem)' : '0.25rem',
+              width: 'calc(50% - 0.25rem)',
+              height: 'calc(100% - 0.5rem)',
+              background: 'rgba(212, 175, 55, 0.15)',
+              borderRadius: '6px',
+              transition: 'left 0.3s ease',
+              zIndex: 1
+            }}></div>
+            <button 
+              onClick={() => handleTabChange('professional')}
+              style={{
+                flex: 1,
+                padding: '0.5rem 0.75rem',
+                background: 'transparent',
+                border: 'none',
+                color: activeTab === 'professional' ? '#d4af37' : '#71717a',
+                fontSize: '0.8rem',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'color 0.3s ease',
+                position: 'relative',
+                zIndex: 2,
+                borderRadius: '6px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.35rem'
+              }}
+            >
+              <Briefcase size={13} />
+              Professional
+            </button>
+            <button 
+              onClick={() => handleTabChange('academic')}
+              style={{
+                flex: 1,
+                padding: '0.5rem 0.75rem',
+                background: 'transparent',
+                border: 'none',
+                color: activeTab === 'academic' ? '#d4af37' : '#71717a',
+                fontSize: '0.8rem',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'color 0.3s ease',
+                position: 'relative',
+                zIndex: 2,
+                borderRadius: '6px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.35rem'
+              }}
+            >
+              <GraduationCap size={13} />
+              Academic
+            </button>
+          </div>
+
+          <div style={{ position: 'relative', minHeight: '500px' }}>
+            <div style={{
+              position: activeTab === 'professional' ? 'relative' : 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              opacity: activeTab === 'professional' ? 1 : 0,
+              transform: activeTab === 'professional' ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              pointerEvents: activeTab === 'professional' ? 'all' : 'none'
+            }}>
+              {experiences.map((exp, idx) => (
+                <div 
+                  key={idx}
+                  ref={(el) => { itemRefs.current[idx] = el; }}
+                  style={{
+                    background: 'transparent',
+                    borderRadius: 0,
+                    padding: '1.5rem 0',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                    transition: 'all 0.3s ease',
+                    opacity: visibleItems.includes(idx) ? 1 : 0,
+                    transform: visibleItems.includes(idx) ? 'translateY(0)' : 'translateY(20px)',
+                    position: 'relative',
+                    marginBottom: 0
+                  }}
+                >
+                  <div style={{ position: 'relative' }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '1rem',
+                      marginBottom: '0.75rem'
+                    }}>
+                      <div style={{
+                        width: '2.5rem',
+                        height: '2.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        borderRadius: '4px',
+                        opacity: 0.9
+                      }}>
                         <img 
-                          src={edu.logo} 
-                          alt={edu.school} 
-                          className="exp-edu-logo"
-                          loading="lazy"
+                          src={exp.logo} 
+                          alt={exp.company}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain',
+                            borderRadius: '4px'
+                          }}
                         />
                       </div>
-                    ) : (
-                      <div className="exp-edu-symbol-container">
-                        {edu.icon}
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                          <span style={{
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                            color: '#d4af37',
+                            display: 'block',
+                            marginBottom: '0.25rem',
+                            transition: 'color 0.3s ease'
+                          }}>{exp.company}</span>
+                          {exp.isCurrent && (
+                            <span style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.25rem',
+                              padding: '0.2rem 0.4rem',
+                              background: 'rgba(212, 175, 55, 0.12)',
+                              borderRadius: '3px',
+                              fontSize: '0.65rem',
+                              fontWeight: 500,
+                              color: '#d4af37',
+                              marginLeft: '0.5rem'
+                            }}>Current</span>
+                          )}
+                        </div>
+                        <div style={{
+                          fontSize: '1.1rem',
+                          fontWeight: 600,
+                          color: '#ffffff',
+                          marginBottom: '0.5rem',
+                          lineHeight: 1.3,
+                          transition: 'color 0.3s ease'
+                        }}>{exp.role}</div>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '1rem',
+                          fontSize: '0.8rem',
+                          color: '#a1a1aa',
+                          marginBottom: '0.5rem'
+                        }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <MapPin size={12} />
+                            {exp.location}
+                          </span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <Calendar size={12} />
+                            {exp.period}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{
+                      fontSize: '0.9rem',
+                      lineHeight: 1.6,
+                      color: '#d4d4d8',
+                      marginTop: '0.5rem'
+                    }}>{exp.description}</div>
+                    
+                    {exp.skills && (
+                      <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0.4rem',
+                        marginTop: '0.75rem'
+                      }}>
+                        {exp.skills.map((skill, skillIdx) => (
+                          <span key={skillIdx} style={{
+                            padding: '0.25rem 0.5rem',
+                            background: 'rgba(212, 175, 55, 0.08)',
+                            borderRadius: '4px',
+                            fontSize: '0.7rem',
+                            color: '#d4af37',
+                            opacity: 0.8
+                          }}>
+                            {skill}
+                          </span>
+                        ))}
                       </div>
                     )}
-                    <div className="company-info">
-                      <span className="exp-edu-school">{edu.school}</span>
-                      <div className="exp-edu-degree">{edu.degree}</div>
-                      <div className="exp-edu-meta">
-                        <span className="exp-edu-location">
-                          <MapPin size={12} />
-                          {edu.location}
-                        </span>
-                        <span className="exp-edu-period">
-                          <Calendar size={12} />
-                          {edu.period}
-                        </span>
+
+                    {exp.hasExercises && exp.exerciseImage && (
+                      <div style={{ marginTop: '1rem' }}>
+                        <button
+                          onClick={() => openModal(exp.exerciseImage!)}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '0.6rem 1rem',
+                            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%)',
+                            border: '1px solid rgba(212, 175, 55, 0.3)',
+                            borderRadius: '6px',
+                            color: '#d4af37',
+                            fontSize: '0.85rem',
+                            fontWeight: 500,
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            fontFamily: 'inherit'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%)';
+                            e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.5)';
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%)';
+                            e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.3)';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                          }}
+                        >
+                          <ExternalLink size={16} />
+                          View My 1337 Journeyy
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              position: activeTab === 'academic' ? 'relative' : 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              opacity: activeTab === 'academic' ? 1 : 0,
+              transform: activeTab === 'academic' ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              pointerEvents: activeTab === 'academic' ? 'all' : 'none'
+            }}>
+              {education.map((edu, idx) => (
+                <div 
+                  key={idx}
+                  ref={(el) => { itemRefs.current[experiences.length + idx] = el; }}
+                  style={{
+                    background: 'transparent',
+                    borderRadius: 0,
+                    padding: '1.5rem 0',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                    transition: 'all 0.3s ease',
+                    opacity: visibleItems.includes(experiences.length + idx) ? 1 : 0,
+                    transform: visibleItems.includes(experiences.length + idx) ? 'translateY(0)' : 'translateY(20px)',
+                    position: 'relative',
+                    marginBottom: 0
+                  }}
+                >
+                  <div style={{ position: 'relative' }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '1rem',
+                      marginBottom: '0.75rem'
+                    }}>
+                      {edu.logo ? (
+                        <div style={{
+                          width: '2.5rem',
+                          height: '2.5rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          borderRadius: '4px',
+                          opacity: 0.9
+                        }}>
+                          <img 
+                            src={edu.logo} 
+                            alt={edu.school}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                              borderRadius: '4px'
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div style={{
+                          width: '2.5rem',
+                          height: '2.5rem',
+                          borderRadius: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          color: '#d4af37',
+                          opacity: 0.7
+                        }}>
+                          {edu.icon}
+                        </div>
+                      )}
+                      <div style={{ flex: 1 }}>
+                        <span style={{
+                          fontSize: '0.8rem',
+                          fontWeight: 600,
+                          color: '#d4af37',
+                          display: 'block',
+                          marginBottom: '0.25rem',
+                          transition: 'color 0.3s ease'
+                        }}>{edu.school}</span>
+                        <div style={{
+                          fontSize: '1.1rem',
+                          fontWeight: 600,
+                          color: '#ffffff',
+                          marginBottom: '0.5rem',
+                          lineHeight: 1.3,
+                          transition: 'color 0.3s ease'
+                        }}>{edu.degree}</div>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '1rem',
+                          fontSize: '0.8rem',
+                          color: '#a1a1aa',
+                          marginBottom: '0.5rem'
+                        }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <MapPin size={12} />
+                            {edu.location}
+                          </span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <Calendar size={12} />
+                            {edu.period}
+                          </span>
+                        </div>
                       </div>
                     </div>
+                    <div style={{
+                      fontSize: '0.9rem',
+                      lineHeight: 1.6,
+                      color: '#d4d4d8',
+                      marginTop: '0.5rem'
+                    }}>{edu.description}</div>
+                    
+                    {edu.skills && (
+                      <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0.4rem',
+                        marginTop: '0.75rem'
+                      }}>
+                        {edu.skills.map((skill, skillIdx) => (
+                          <span key={skillIdx} style={{
+                            padding: '0.25rem 0.5rem',
+                            background: 'rgba(212, 175, 55, 0.08)',
+                            borderRadius: '4px',
+                            fontSize: '0.7rem',
+                            color: '#d4af37',
+                            opacity: 0.8
+                          }}>
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div className="exp-edu-description">{edu.description}</div>
-                  
-                  {edu.skills && (
-                    <div className="skills-tags">
-                      {edu.skills.map((skill, skillIdx) => (
-                        <span key={skillIdx} className="skill-tag">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Modal */}
+      {showModal && (
+        <div
+          onClick={closeModal}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '2rem',
+            cursor: 'pointer',
+            animation: 'fadeIn 0.3s ease-out'
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              position: 'relative',
+              cursor: 'default',
+              animation: 'scaleIn 0.3s ease-out'
+            }}
+          >
+            <button
+              onClick={closeModal}
+              style={{
+                position: 'absolute',
+                top: '-3rem',
+                right: '0',
+                background: 'rgba(212, 175, 55, 0.1)',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
+                borderRadius: '50%',
+                width: '2.5rem',
+                height: '2.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#d4af37',
+                fontSize: '1.5rem',
+                fontWeight: 300,
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(212, 175, 55, 0.2)';
+                e.currentTarget.style.transform = 'rotate(90deg)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(212, 175, 55, 0.1)';
+                e.currentTarget.style.transform = 'rotate(0deg)';
+              }}
+            >
+              ×
+            </button>
+            <img
+              src={selectedImage}
+              alt="1337 Exercises"
+              style={{
+                maxWidth: '100%',
+                maxHeight: '85vh',
+                objectFit: 'contain',
+                borderRadius: '8px',
+                border: '2px solid rgba(212, 175, 55, 0.3)'
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
+    </>
   );
 };
 
