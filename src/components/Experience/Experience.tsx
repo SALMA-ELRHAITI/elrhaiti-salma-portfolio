@@ -142,6 +142,23 @@ const ExperienceEducation: React.FC = () => {
     setSelectedImage('');
   };
 
+  // Add ESC key to close modal
+  useEffect(() => {
+    const handleEscKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showModal) {
+        closeModal();
+      }
+    };
+
+    if (showModal) {
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [showModal]);
+
   return (
     <>
       <section id="experience" style={{
@@ -426,7 +443,7 @@ const ExperienceEducation: React.FC = () => {
                           }}
                         >
                           <ExternalLink size={16} />
-                          View My 1337 Journeyy
+                          View My 1337 Journey
                         </button>
                       </div>
                     )}
@@ -600,8 +617,8 @@ const ExperienceEducation: React.FC = () => {
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              maxWidth: '90%',
-              maxHeight: '90%',
+              maxWidth: '70%',
+              maxHeight: '70%',
               position: 'relative',
               cursor: 'default',
               animation: 'scaleIn 0.3s ease-out'
@@ -643,7 +660,9 @@ const ExperienceEducation: React.FC = () => {
               alt="1337 Exercises"
               style={{
                 maxWidth: '100%',
-                maxHeight: '85vh',
+                maxHeight: '65vh',
+                width: 'auto',
+                height: 'auto',
                 objectFit: 'contain',
                 borderRadius: '8px',
                 border: '2px solid rgba(212, 175, 55, 0.3)'
@@ -671,6 +690,17 @@ const ExperienceEducation: React.FC = () => {
           to {
             opacity: 1;
             transform: scale(1);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .modal-container {
+            max-width: 95% !important;
+            max-height: 80% !important;
+          }
+          
+          .modal-image {
+            max-height: 60vh !important;
           }
         }
       `}</style>
