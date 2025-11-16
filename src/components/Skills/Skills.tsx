@@ -39,7 +39,6 @@ const Skills: React.FC = () => {
     { name: "Tailwind", icon: <SiTailwindcss />, color: "#06B6D4", category: "Frontend" },
 
     // Backend
-    { name: "Node.js", icon: <SiNodedotjs />, color: "#339933", category: "Backend" },
     { name: "Laravel", icon: <SiLaravel />, color: "#FF2D20", category: "Backend" },
 
     // Database
